@@ -23,6 +23,23 @@ class Home extends Component {
     this.fetchItems(endpoint);
   }
 
+  searchItems = (searchTerm) => {
+    console.log(searchTerm);
+    let endpoint = "";
+    this.setState({
+      loading: true,
+      movies: [],
+      searchTerm,
+    });
+
+    if (searchTerm === "") {
+      endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-US&page=1`;
+    } else {
+      endpoint = `${API_URL}search/movie?api_key=${API_KEY}&language=en-US&query=${this.state.searchTerm}`;
+    }
+    this.fetchItems(endpoint);
+  };
+
   LoadMoreItems = () => {
     let endpoint = "";
     this.setState({ loading: true });
@@ -32,7 +49,7 @@ class Home extends Component {
         this.state.currentPage + 1
       }`;
     } else {
-      endpoint = `${API_URL}search/popular?api_key=${API_KEY}&language=en-US&query=${
+      endpoint = `${API_URL}search/movie?api_key=${API_KEY}&language=en-US&query=${
         this.state.searchTerm
       }&page=${this.state.currentPage + 1}`;
     }
@@ -51,17 +68,29 @@ class Home extends Component {
           currentPage: data.page,
           totalPages: data.total_pages,
         });
-      });
+      })
+      .catch((error) => console.log(error));
   };
 
   render() {
+    console.log(this.state.movies);
+    const { movies, heroImage } = this.state;
     return (
-      <div className="rmdb-hame">
-        <HeroImage />
-        <SearchBar />
-        <FourColGrid />
+      <div className="rmdb-home">
+        <div>
+          {this.state.heroImage ? (
+            <div>
+              <HeroImage
+                image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}/${this.state.heroImage.backdrop_path}`}
+                title={this.state.heroImage.original_title}
+                text={this.state.heroImage.overview}
+              />
+              <SearchBar callback={this.searchItems} />
+            </div>
+          ) : null}
+        </div>
+        <FourColGrid movies={movies} />
         <MovieThumb />
-        <SearchBar />
         <LoadMoreBtn />
       </div>
     );
