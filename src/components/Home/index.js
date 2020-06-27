@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { API_KEY, API_URL, IMAGE_BASE_URL, BACKDROP_SIZE } from "../../config";
+import {
+  API_KEY,
+  API_URL,
+  IMAGE_BASE_URL,
+  BACKDROP_SIZE,
+  POSTER_SIZE,
+} from "../../config";
 import "./Home.css";
 import HeroImage from "../elements/HeroImage";
 import SearchBar from "../elements/SearchBar";
@@ -74,7 +80,7 @@ class Home extends Component {
 
   render() {
     console.log(this.state.movies);
-    const { movies, heroImage } = this.state;
+    const { movies, heroImage, searchTerm, loading } = this.state;
     return (
       <div className="rmdb-home">
         <div>
@@ -89,8 +95,28 @@ class Home extends Component {
             </div>
           ) : null}
         </div>
-        <FourColGrid movies={movies} />
-        <MovieThumb />
+        <div className="rmdb-home-grid">
+          <FourColGrid
+            header={searchTerm ? "Search result" : "Popular movies"}
+            loading={loading}
+          >
+            {movies.map((el, i) => {
+              return (
+                <MovieThumb
+                  key={i}
+                  clickable={true}
+                  image={
+                    el.poster_path
+                      ? `${IMAGE_BASE_URL}${POSTER_SIZE}${el.poster_path}`
+                      : "./images/no_image.png"
+                  }
+                  movieId={el.id}
+                  movieName={el.original_title}
+                />
+              );
+            })}
+          </FourColGrid>
+        </div>
         <LoadMoreBtn />
       </div>
     );
