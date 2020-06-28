@@ -2,16 +2,17 @@ import React, { Component } from "react";
 import {
   API_KEY,
   API_URL,
-  IMAGE_BASE_URL,
   BACKDROP_SIZE,
+  IMAGE_BASE_URL,
   POSTER_SIZE,
 } from "../../config";
-import "./Home.css";
-import HeroImage from "../elements/HeroImage";
-import SearchBar from "../elements/SearchBar";
-import MovieThumb from "../elements/MovieThumb";
 import FourColGrid from "../elements/FourColGrid";
+import HeroImage from "../elements/HeroImage";
 import LoadMoreBtn from "../elements/LoadMoreBtn";
+import MovieThumb from "../elements/MovieThumb";
+import SearchBar from "../elements/SearchBar";
+import Spinner from "../elements/Spinner";
+import "./Home.css";
 
 class Home extends Component {
   state = {
@@ -70,7 +71,7 @@ class Home extends Component {
         this.setState({
           movies: [...this.state.movies, ...data.results],
           heroImage: this.state.heroImage || data.results[0],
-          loading: true,
+          loading: false,
           currentPage: data.page,
           totalPages: data.total_pages,
         });
@@ -80,7 +81,7 @@ class Home extends Component {
 
   render() {
     console.log(this.state.movies);
-    const { movies, heroImage, searchTerm, loading } = this.state;
+    const { movies, searchTerm, loading, currentPage, totalPages } = this.state;
     return (
       <div className="rmdb-home">
         <div>
@@ -116,8 +117,11 @@ class Home extends Component {
               );
             })}
           </FourColGrid>
+          {loading ? <Spinner /> : null}
+          {currentPage <= totalPages ? (
+            <LoadMoreBtn text="Load More" onClick={this.LoadMoreItems} />
+          ) : null}
         </div>
-        <LoadMoreBtn />
       </div>
     );
   }
