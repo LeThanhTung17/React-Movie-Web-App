@@ -55,13 +55,33 @@ class Movie extends Component {
   };
 
   render() {
+    const { movie, directors, actors, loading } = this.state;
     return (
       <div className="rmdb-movie">
-        <Navigation />
-        <MovieInfo />
-        <MovieInfoBar />
-        <FourColGrid />
-        <Spinner />
+        {movie ? (
+          <div>
+            <Navigation movie={this.props.location.movieName} />
+            <MovieInfo movie={movie} directors={directors} />
+            <MovieInfoBar
+              time={movie.runtime}
+              budget={movie.budget}
+              revenue={movie.revenue}
+            />
+          </div>
+        ) : null}
+        {actors ? (
+          <div className="rmdb-movie-grid">
+            <FourColGrid header={"Actor"}>
+              {actors
+                .map((el, i) => {
+                  return <Actor key={i} actor={el} />;
+                })
+                .slice(0, 20)}
+            </FourColGrid>
+          </div>
+        ) : null}
+        {!actors ? <h1>No Movie Found!</h1> : null}
+        {loading ? <Spinner /> : null}
       </div>
     );
   }

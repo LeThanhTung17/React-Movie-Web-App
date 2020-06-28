@@ -18,8 +18,8 @@ const MovieInfo = (props) => {
         <div className="rmdb-movieinfo-thumb">
           <MovieThumb
             image={
-              props.movie.backdrop_path
-                ? `${IMAGE_BASE_URL}${BACKDROP_SIZE}${props.movie.backdrop_path}`
+              props.movie.poster_path
+                ? `${IMAGE_BASE_URL}${BACKDROP_SIZE}${props.movie.poster_path}`
                 : "./images/no_image.jpg"
             }
             clickable={false}
@@ -41,8 +41,8 @@ const MovieInfo = (props) => {
             ></meter>
             <p className="rmdb-score">{props.movie.vote_average}</p>
           </div>
-          {props.movie.directors > 1 ? <h3>Directors</h3> : <h3>Director</h3>}
-          {props.movie.directors.map((el, i) => {
+          {props.directors.length > 1 ? <h3>Directors</h3> : <h3>Director</h3>}
+          {props.directors.map((el, i) => {
             return (
               <p className="rmdb-director" key={i}>
                 {el.name}

@@ -112,7 +112,7 @@ class Home extends Component {
                       : "./images/no_image.jpg"
                   }
                   movieId={el.id}
-                  movieName={el.original_title}
+                  movieName={el.title}
                 />
               );
             })}
