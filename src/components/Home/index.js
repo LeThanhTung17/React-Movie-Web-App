@@ -109,7 +109,7 @@ class Home extends Component {
                   image={
                     el.poster_path
                       ? `${IMAGE_BASE_URL}${POSTER_SIZE}${el.poster_path}`
-                      : "./images/no_image.png"
+                      : "./images/no_image.jpg"
                   }
                   movieId={el.id}
                   movieName={el.original_title}
